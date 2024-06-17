@@ -21,14 +21,17 @@
  * Note that attributes x and y are public for simplicity.
  */
 export class Vec {
+  /** @type {number} -- public attribute for the x-coordinate */
+  x;
+  /** @type {number} -- public attribute for the y-coordinate */
+  y;
+
   /**
    * @param {number} x -- the x-coordinate
    * @param {number} y -- the y-coordinate
    */
   constructor(x = 0, y = 0) {
-    /** @type {number} -- attribute for the x-coordinate */
     this.x = x;
-    /** @type {number} -- attribute for the y-coordinate */
     this.y = y;
   }
 

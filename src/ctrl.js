@@ -19,12 +19,16 @@
 import { DrawVectors } from "./draw.js";
 import { Vec } from "./vec.js";
 
+/**
+ * Controller class for the web app.
+ */
 export class Control {
-  constructor() {
-    /** @type {Vec} */
-    this.vec = new Vec(5, 5);
+  /** @type {Vec} */
+  vec = new Vec(5, 5);
+  /** @type {DrawVectors} */
+  draw;
 
-    /** @type {DrawVectors} */
+  constructor() {
     this.draw = new DrawVectors(
       /** @type {HTMLCanvasElement} */ (document.getElementById("my-canvas"))
     );

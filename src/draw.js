@@ -19,35 +19,31 @@
 import { Vec } from "./vec.js";
 
 export class DrawVectors {
+  /** @type {HTMLCanvasElement} */
+  canvas;
   /** @type {Vec} -- private attribute for the vector */
-  #vector = null;
+  #vector;
+  /** @type {CanvasRenderingContext2D} */
+  ctx;
+  /** @type {HTMLImageElement} */
+  img;
 
   /**
    * Constructor.
    * @param {HTMLCanvasElement} canvasElement -- a canvas element
    */
   constructor(canvasElement) {
-    /** @type {HTMLCanvasElement} */
     this.canvas = canvasElement;
-    /** @type {Vec} */
     this.#vector = new Vec(1, 0);
-    /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext("2d");
 
+    // load image
     this.img = /** @type {HTMLImageElement} */ (document.createElement("img"));
     this.img.src = "img/img.png?version=1";
     this.img.addEventListener("load", () => {
       this.draw();
     });
 
-    this.#init();
-  }
-
-  /**
-   * Private method for initialization.
-   * @returns {void}
-   */
-  #init() {
     // initialize resizing
     window.addEventListener("resize", () => {
       this.#resize();
@@ -73,7 +69,7 @@ export class DrawVectors {
   }
 
   /**
-   * Resizes the canvas HTML element.
+   * Private method for resizing the canvas HTML element.
    * @returns {void}
    */
   #resize() {
