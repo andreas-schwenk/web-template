@@ -13,14 +13,12 @@
  */
 
 /**
- * SYNOPSIS
- *   This file demonstrates the implementation of a classes.
+ * This file demonstrates the implementation of a class for a vector.
  */
-
-// TODO: "private" attributes
 
 /**
  * A simple class to implement a three dimensional vector.
+ * Note that attributes x and y are public for simplicity.
  */
 export class Vec {
   /**
@@ -37,10 +35,29 @@ export class Vec {
   /**
    * Scales the vector by a scalar.
    * @param {number} w -- the scaling scalar
+   * @returns {void}
    */
   scale(w) {
     this.x *= w;
     this.y *= w;
+  }
+
+  /**
+   * Calculates the length of the vector.
+   * @returns {number}
+   */
+  length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+
+  /**
+   * Normalizes the vector.
+   * @returns {void}
+   */
+  normalize() {
+    let l = this.length();
+    this.x /= l;
+    this.y /= l;
   }
 
   /**

@@ -7,5 +7,5 @@ esbuild.buildSync({
   target: "",
   entryPoints: ["src/index.js"],
   bundle: true,
-  outfile: "dist/my-app.min.js",
+  outfile: "dist/myApp.min.js",
 });
