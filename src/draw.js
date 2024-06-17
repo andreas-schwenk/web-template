@@ -35,7 +35,7 @@ export class DrawVectors {
     this.ctx = this.canvas.getContext("2d");
 
     this.img = /** @type {HTMLImageElement} */ (document.createElement("img"));
-    this.img.src = "img/img.png";
+    this.img.src = "img/img.png?version=1";
     this.img.addEventListener("load", () => {
       this.draw();
     });
