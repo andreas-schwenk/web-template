@@ -26,17 +26,17 @@ We will need to run a local web server. There are several options for doing this
 
 - Alternatively, you can run a web server via `python3 -m http.server 5500` (requires Python to be installed).
 
-# Dependencies
+## Dependencies
 
 `npm` stands for Node Package Manager. It is the default package manager for the JavaScript runtime environment Node.js, allowing developers to share, distribute, and manage dependencies in their projects.
 
 To install all the dependencies listed in the `package.json` file, open the terminal (`Terminal` &rarr; `New Terminal` in the main menu) and type `npm i`, then press enter.
 
-We will use two dependencies in this project. The first is `esbuild`, an extremely fast JavaScript bundler and minifier. It compiles the source files from the `src/` directory into a single, small JavaScript file in the `dist/` directory. However, since our project is set up as a `module`, a bundler is not strictly necessary. For more details, refer to the "Minification" section below.
+We will use two dependencies in this project. The first is `esbuild`, an extremely fast JavaScript bundler and minifier. It compiles the source files from the `src/` directory into a single, small JavaScript file in the `dist/` directory. However, since our project is set up as a `module`, a bundler is not strictly necessary. For more details, refer to the "Compilation, Bundling, Minification" section below.
 
-The second dependency is `katex`, used to render mathematical equations with [TeX](https://en.wikipedia.org/wiki/TeX). This dependency is not included in the provided source code. This tutorial will explain how to use external libraries, with `katex` as an example.
+The second dependency is `katex`, which is used to render mathematical equations with [TeX](https://en.wikipedia.org/wiki/TeX). This dependency is not included in the provided source code, so you will need to follow the steps outlined in this tutorial to include the library.
 
-# First Run
+## First Run
 
 If you open `index.html` in your favorite browser, you will notice that the site does not function correctly: the button does nothing, and the drawing area is black. Open the browser's console to check for any errors. Depending on your browser, you might see messages such as "Failed to load resource: Origin null is not allowed by Access-Control-Allow-Origin." This occurs because the browser does not have permission to access other local files.
 
@@ -48,7 +48,7 @@ Alternatively, start a web server by running `python3 -m http.server 5500` and t
 
 ![image](img/readme/screenshot.jpg)
 
-# Files
+## Files
 
 The following tables list all the directories and files in this repository. Reviewing each file will help you gain a deeper understanding.
 
@@ -67,8 +67,6 @@ The following tables list all the directories and files in this repository. Revi
 | `LICENSE`       | License of this repository                                               |
 | `package.json`  | Manages project dependencies, scripts, and metadata in Node.js projects. |
 | `README.md`     | This Readme file                                                         |
-
-## Details
 
 Directory `.vscode/` provides configuration files for this project:
 
