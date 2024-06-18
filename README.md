@@ -181,7 +181,7 @@ class MyClass {
   /* @type {number} -- private attribute for a number */
   #privateAttribute;
   /* @type {number} -- public attribute for a number */
-  publicAttribute = 5; // TODO: must this attribute be listed in the constructor??
+  publicAttribute = 5;
 
   /**
    * @param {number} value -- the number
@@ -262,12 +262,6 @@ npm run test
 ```
 
 All tests are implemented in the `tests/` directory.
-
-## Canvas
-
-requestAnimationFrame
-
-webGL / three.js / ...
 
 ## External modules
 

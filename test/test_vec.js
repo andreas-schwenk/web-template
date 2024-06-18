@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *
@@ -12,16 +12,16 @@
  * IN THE SOFTWARE.
  */
 
+/**
+ * This file implements tests for the vector class.
+ * It is intended to be executed by Node.js.
+ */
+
 // import the assert library, provided by node.js
 import assert from "assert";
 
 // import the class under test
 import { Vec } from "../src/vec.js";
-
-/**
- * This file implements tests for the vector class.
- * It is intended to be executed by Node.js.
- */
 
 let v = new Vec(4, -1);
 assert.equal(v.x, 4);

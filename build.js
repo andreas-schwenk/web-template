@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *

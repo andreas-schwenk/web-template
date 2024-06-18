@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- character encoding -->
     <meta charset="utf-8" />
+
+    <!-- enable a responsive web design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- title of the website -->
     <title>Web Template</title>
+
+    <!-- CSS; you may alternatively include an external CSS file with
+          <link rel="stylesheet" href="styles.css">
+    -->
     <style>
       html {
         font-family: Arial, Helvetica, sans-serif;
@@ -50,26 +58,29 @@
       }
     </style>
   </head>
+
   <body>
+    <!-- headline -->
     <h1>Web Template</h1>
 
+    <!-- button panel -->
     <div class="config">
       x <input id="x" type="text" value="5" /> &nbsp;&nbsp; y
       <input id="y" type="text" value="5" /> &nbsp;&nbsp;
       <button id="norm">normalize</button>
     </div>
 
-    <div class="math" id="math"></div>
-
+    <!-- drawing panel -->
     <canvas id="my-canvas"></canvas>
 
-    <!-- import as module -->
+    <!-- OPTION 1: import source code as module -->
     <script type="module">
       import * as index from "./src/index.js";
     </script>
 
-    <!-- minified version, created via "npm run build"
-    <script src="dist/myApp.min.js"></script>
+    <!-- OPTION 2: import the compiled code, created by "npm run build" -->
+    <!--
+      <script src="dist/myApp.min.js"></script>
     -->
   </body>
 </html>

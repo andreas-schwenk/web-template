@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *
@@ -16,12 +16,14 @@
  * This file represents the root source file.
  */
 
-// import the controller class. Note the relative path, preceded by "./"
-
-import { Control } from "./control.js";
-
 // just a log to the console
 console.log("hello, world");
+
+/*
+  TUTORIAL NOTES: the following line imports the controller class definition.
+  Note the relative path, preceded by "./"
+*/
+import { Control } from "./control.js";
 
 // create an instance of the controller class
 new Control();

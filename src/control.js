@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *
@@ -23,9 +23,9 @@ import { Vec } from "./vec.js";
  * Controller class for the web app.
  */
 export class Control {
-  /** @type {Vec} */
+  /** @type {Vec} -- the vector instance */
   vec = new Vec(5, 5);
-  /** @type {Paint} */
+  /** @type {Paint} -- instance of the Paint */
   paint;
 
   constructor() {

@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *
@@ -25,38 +25,40 @@ export class Paint {
   /** @type {HTMLCanvasElement} -- drawing area */
   canvas;
   /** @type {Vec} -- private attribute for the vector */
-  #vector;
+  #vector = new Vec(1, 0);
   /** @type {CanvasRenderingContext2D} -- rendering context */
   ctx;
   /** @type {HTMLImageElement} -- image */
   img;
 
   /**
-   * Constructor.
+   * Creates a new instance of class Paint.
    * @param {HTMLCanvasElement} canvasElement -- a canvas element
    */
   constructor(canvasElement) {
     this.canvas = canvasElement;
-    this.#vector = new Vec(1, 0);
     this.ctx = this.canvas.getContext("2d");
 
-    // load image
+    // load image (providing a version number prevents loading a cached revision)
     this.img = /** @type {HTMLImageElement} */ (document.createElement("img"));
-    this.img.src = "img/img.png?version=1";
+    this.img.src = "img/img.png?version=2";
     this.img.addEventListener("load", () => {
       this.draw();
     });
 
-    // initialize resizing
+    // initialize window resizing callback
     window.addEventListener("resize", () => {
       this.#resize();
     });
+
+    // resize once at startup
     this.#resize();
   }
 
   /**
    * Setter method for private attribute vector.
    * @param {Vec} v
+   * @returns {void}
    */
   setVector(v) {
     this.#vector = v;
@@ -76,14 +78,14 @@ export class Paint {
    * @returns {void}
    */
   #resize() {
-    const ratio = window.devicePixelRatio;
+    const ratio = window.devicePixelRatio; // 2 for "retina" displays, else 1
     this.canvas.width = ratio * this.canvas.offsetWidth;
     this.canvas.height = ratio * this.canvas.offsetHeight;
     this.draw();
   }
 
   /**
-   * Draws the current contents.
+   * Draws the vector.
    * @returns {void}
    */
   draw() {

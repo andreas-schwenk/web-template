@@ -1,5 +1,5 @@
 /**
- * == VANILLA HTML/CSS/JAVASCRIPT TEMPLATE FOR WEB APPLICATIONS ==
+ * Template for a (vanilla) JavaScript-based Web Application using VS Code
  *
  * 2024 by Andreas Schwenk <contact@compiler-construction.com>
  *
@@ -13,22 +13,29 @@
  */
 
 /**
- * This file demonstrates the implementation of a class for a vector.
+ * This file demonstrates the implementation of a class for a 2D vector.
  */
 
 /**
- * A simple class to implement a three dimensional vector.
- * Note that attributes x and y are public for simplicity.
+ * A simple class to implement a two dimensional vector.
+ * Note that attributes x and y are set public for simplicity.
  */
 export class Vec {
-  /** @type {number} -- public attribute for the x-coordinate */
+  /**
+   * TUTORIAL NOTES: All attributes are listed in the following lines.
+   * If an attribute is NOT initialized in the constructor,
+   * you should set its initial value here.
+   */
+
+  /** @type {number} -- public attribute for the first component */
   x;
-  /** @type {number} -- public attribute for the y-coordinate */
+  /** @type {number} -- public attribute for the second component */
   y;
 
   /**
-   * @param {number} x -- the x-coordinate
-   * @param {number} y -- the y-coordinate
+   * Creates a new instance of class Vector.
+   * @param {number} [x=0] -- initial value for the first component
+   * @param {number} [y=0] -- initial value for the second component
    */
   constructor(x = 0, y = 0) {
     this.x = x;
@@ -50,6 +57,7 @@ export class Vec {
    * @returns {number}
    */
   length() {
+    // TUTORIAL NOTES: library Math must NOT be imported explicitly.
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
@@ -64,7 +72,8 @@ export class Vec {
   }
 
   /**
-   * Static method, that returns a new objects that adds two given vectors.
+   * Static method that returns a new instance representing the sum of two given
+   * vectors.
    * @param {Vec} u -- the first summand
    * @param {Vec} v -- the second summand
    * @returns {Vec} -- the sum
@@ -75,6 +84,7 @@ export class Vec {
 
   /**
    * Stringifies the vector.
+   * Example output: "(1,2)".
    * @returns {string}
    */
   toString() {
@@ -83,6 +93,7 @@ export class Vec {
 
   /**
    * Exports the current vector object as JSON-data.
+   * Example output:  { "x": 1, "y": 2 }
    * @returns {Object.<string,any>}
    */
   toJSON() {
@@ -93,20 +104,25 @@ export class Vec {
   }
 
   /**
-   * Creates an instance, given JSON-data.
-   * @param {Object.<string,any>} j -- JSON data
-   * @returns {Vec} -- the vector
+   * Creates an instance from JSON data.
+   * @param {Object.<string,any>} json -- JSON data. Example: { "x": 1, "y": 2 }
+   * @returns {Vec} -- a new instance of class Vector
    */
-  fromJSON(j) {
+  fromJSON(json) {
     let v = new Vec();
+    /*
+      TUTORIAL NOTES: In a real-world application, you should validate all 
+      members of the provided JSON data, or at a minimum, include a try-catch 
+      block on the caller side for error handling.
 
-    // TODO
-    if ("x" in j == false) throw Error("missing 'x'");
-    if (typeof (j["x"] !== "number")) throw Error("'x' must be of type number");
-
-    v.x = j["x"];
-    v.y = j["y"];
-
+        if ("x" in j == false) 
+          throw Error("missing 'x'");
+        
+        if (typeof (j["x"] !== "number")) 
+          throw Error("'x' must be of type number");
+    */
+    v.x = json["x"];
+    v.y = json["y"];
     return v;
   }
 }
