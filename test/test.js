@@ -12,30 +12,9 @@
  * IN THE SOFTWARE.
  */
 
-// import the assert library, provided by node.js
-import assert from "assert";
-
-// import the class under test
-import { Vec } from "../src/vec.js";
-
 /**
- * This file implements tests for the vector class.
- * It is intended to be executed by Node.js.
+ * This file is the root file for all unit tests.
  */
 
-let v = new Vec(4, -1);
-assert.equal(v.x, 4);
-assert.equal(v.y, -1);
-
-const EPS = 1e-9;
-v.normalize();
-assert.equal(Math.abs(v.x - 0.7071067811) < EPS);
-assert.equal(Math.abs(v.y + 0.7071067811) < EPS);
-
-v = Vec.add(new Vec(1, 2), new Vec(3, 4));
-assert.equal(v.x, 4);
-assert.equal(v.y, 6);
-
-v = new Vec(1, 2);
-v.scale(2);
-assert.equal(Math.abs(v.length() - 4.4721359549) < EPS);
+// run unit tests (... yet only implemented for class Vector)
+import "./test_vec.js";

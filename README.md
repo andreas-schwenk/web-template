@@ -2,9 +2,11 @@
 
 > Template for a Vanilla JavaScript-based Web Application using VSCode: Setup, structuring, debugging, and minification.
 
-There are millions of HTML/JavaScript tutorials available. This one is designed as a starting point for students with little experience in web development, as well as for experienced users who want to switch to _Visual Studio Code_ and utilize its linter and debugger features.
+There are countless HTML/JavaScript tutorials available. This one is designed as a starting point for students with little experience in web development, as well as for experienced users who want to switch to _Visual Studio Code_ and utilize its linter and debugger features.
 
-We will not provide a detailed introduction to JavaScript syntax but will demonstrate some object-oriented JavaScript code that is easy to understand. The focus will be on classes, private methods, and a well-structured project setup.
+We will **not** cover JavaScript libraries for rapidly building user interfaces, such as `React`, `vue.js`, or `angular`, as we believe it is necessary to first understand the foundations. These libraries should be used **after** studying this tutorial.
+
+We will not provide a detailed introduction to JavaScript syntax but will demonstrate object-oriented JavaScript code that is easy to understand. The focus will be on classes, private methods, and a well-structured project setup.
 
 Finally, we will demonstrate how to include external libraries and use a build tool to bundle and minify the code.
 
@@ -32,7 +34,7 @@ Go to the terminal window (`Terminal` &rarr; `New Terminal` in the main menu) an
 
 The only dependency we use here is `esbuild`, an extremely fast JavaScript bundler and minifier. It compiles the source files from the `src/` directory into a single, small JavaScript file in the `dist/` directory. However, since our project is set up as a `module`, a bundler is not strictly necessary. For more details, refer to the "Minification" section below.
 
-# First Run and Debugging
+# First Run
 
 If you open `index.html` in your favorite browser, you will notice that the site does not function correctly: the button does nothing, and the drawing area is black. Open the browser's console to check for any errors. Depending on your browser, you might see messages such as "Failed to load resource: Origin null is not allowed by Access-Control-Allow-Origin." This occurs because the browser does not have permission to access other local files.
 
@@ -46,28 +48,27 @@ Alternatively, start a web server by running `python3 -m http.server 5500` and t
 
 # Files
 
-The following tables show all directories and files from this repository.
-You should observe each file to get a deeper understanding.
+The following tables list all the directories and files in this repository. Reviewing each file will help you gain a deeper understanding.
 
-| path            | description                                 |
-| --------------- | ------------------------------------------- |
-| `.vscode/`      | Configuration files for the VS Code project |
-| `dist/`         | Compiled JavaScript files                   |
-| `img/`          | Images                                      |
-| `node_modules/` | Dependencies, installed via `npm install`   |
-| `src/`          | JavaScript Files = Implementation           |
-| `test/`         | Code tests                                  |
-| `.gitignore`    | Paths that are ignored by `git`             |
-| `build.js`      | Script that outputs files in `dist/`        |
-| `index.html`    | HTML file of the web app                    |
-| `jsconfig.json` | JavaScript configuration for VS Code        |
-| `LICENSE`       | License of this repository                  |
-| `package.json`  |                                             |
-| `README.md`     | This Readme file                            |
+| path            | description                                                              |
+| --------------- | ------------------------------------------------------------------------ |
+| `.vscode/`      | Configuration files for the VS Code project                              |
+| `dist/`         | Bundled/minified JavaScript output                                       |
+| `img/`          | Images                                                                   |
+| `node_modules/` | Dependencies that are installed via `npm install`                        |
+| `src/`          | The core implementation in form of JavaScript files                      |
+| `test/`         | Code tests                                                               |
+| `.gitignore`    | Paths that are ignored by `git`                                          |
+| `build.js`      | Script that outputs files in `dist/`                                     |
+| `index.html`    | HTML file of the web app                                                 |
+| `jsconfig.json` | JavaScript configuration for VS Code                                     |
+| `LICENSE`       | License of this repository                                               |
+| `package.json`  | Manages project dependencies, scripts, and metadata in Node.js projects. |
+| `README.md`     | This Readme file                                                         |
 
 ## Details
 
-Directory `.vscode` provides configuration files for this project:
+Directory `.vscode/` provides configuration files for this project:
 
 | path                      | description                      |
 | ------------------------- | -------------------------------- |
@@ -77,33 +78,12 @@ Directory `.vscode` provides configuration files for this project:
 
 Directory `src/` contains all JavaScript implementation files:
 
-| path           | description                            |
-| -------------- | -------------------------------------- |
-| `src/index.js` | Root JavaScript file                   |
-| `src/vec.js`   | Implements a class for a 2D-Vector     |
-| `src/ctrl.js`  | Implements the behavior of the web app |
-| `src/draw.js`  | Implements the drawing of the vector   |
-
-## Classes
-
-The following code demonstrates a class template. Refer to file `src/vec.js` in this repository for a more practical example.
-
-```js
-class MyClass {
-  static staticAttribute = 3;
-  publicAttribute;
-  #privateAttribute;
-
-  constructor(...) {...}
-
-  publicMethod(...) {...}
-  #privateMethod(...) {...}
-
-  static staticMethod(...) {...}
-}
-```
-
-Public attributes do not need to be declared outside of the constructor; only private attributes must be declared there. However, it is considered good practice to declare all attributes outside the constructor (TypeScript requires this).
+| path             | description                            |
+| ---------------- | -------------------------------------- |
+| `src/index.js`   | Root JavaScript file                   |
+| `src/vec.js`     | Implements a class for a 2D-Vector     |
+| `src/control.js` | Implements the behavior of the web app |
+| `src/draw.js`    | Implements the drawing of the vector   |
 
 ## JSDoc
 
@@ -125,7 +105,7 @@ The following template shows the layout of a JavaScript file.
 /**
  * Project name
  * Author(s)
- * License.
+ * License
  */
 
 /*
@@ -146,9 +126,126 @@ Notes:
 - Global variables should be used sparingly.
 - Only `export` classes and functions when necessary. For example, helper functions should remain visible only within the current file.
 
+## Object Oriented Programming
+
+JavaScript is a prototype-based language, meaning it uses prototypes to achieve inheritance and reuse code. Instead of defining classes, JavaScript objects inherit directly from other objects. Each object has a prototype, which is another object from which it can inherit properties and methods. This allows for dynamic and flexible object creation and inheritance.
+
+Since ECMAScript 6 (ES6), JavaScript has direct support for object-oriented programming (OOP).
+
+Study classes in files `src/vec.js`, `src/draw.js`.
+
+Some notes:
+
+- In JavaScript, private attributes can be defined using the `#` prefix, introduced in ECMAScript 2022 (Later, we will use a build tool to support older browsers). These attributes are only accessible within the class where they are defined, ensuring encapsulation and data privacy. For example:
+
+  ```javascript
+  /**
+   * Demo class showcasing private attributes
+   */
+  class MyClass {
+    /* @type {number} -- private attribute for a number */
+    #privateAttribute;
+    /* @type {number} -- public attribute for a number */
+    publicAttribute = 5; // TODO: must this attribute be listed in the constructor??
+
+    /**
+     * @param {number} value -- the number
+     */
+    constructor(value) {
+      this.#privateAttribute = value;
+    }
+
+    /**
+     * Getter function for the private attribute
+     * @returns {number}
+     */
+    getPrivateAttribute() {
+      return this.#privateAttribute;
+    }
+  }
+  ```
+
 ## Debugging
 
-## VS Code
+We have two options to debug a file:
+
+### Debugging with a browser
+
+1. Start the web server as described in the "First Run" section above.
+2. Select `index.html` in the top-left panel of VS Code.
+3. Enable debugging breakpoints: open a JavaScript file and click to the left of the line number (refer to the screenshot below).
+4. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
+
+![](img/readme/debug.jpg)
+
+### Debugging with Node.js
+
+Some code does not require a browser to run. For example, the `Vector` class in `src/vec.js` can be executed headlessly using [Node.js](https://nodejs.org/en/download/package-manager). In this case, a web server is not needed.
+
+1. Select `node: current file` in the top-left corner of VS Code.
+2. Enable debugging breakpoints by opening a JavaScript file and clicking to the left of the line number.
+3. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
+
+### Launch.json
+
+In the previous sections, we used the launch configurations `index.html` and `node: current file`. These configurations are defined in the `.vscode/launch.json` file. For more details, refer to the [official documentation](https://code.visualstudio.com/docs/editor/debugging).
+
+## Compilation, Bundling, Minification
+
+In the context of web development, JavaScript is compiled to ensure compatibility across different browsers and environments. Modern JavaScript features and syntax introduced in ES6 and beyond are not fully supported by all browsers, especially older versions.
+
+1. **Compatibility**: Code can be transformed into a version that works across all browsers, ensuring a consistent user experience.
+2. **Optimization**: Compiling can optimize the code for performance, reducing load times and improving execution speed.
+3. **Advanced Features**: Developers can use modern language features, such as modules, classes, async/await, and more, without worrying about browser support.
+4. **Tooling Integration**: Compilers like Babel can integrate with other tools and frameworks, providing additional features like JSX for React, TypeScript support, and minification.
+
+Overall, compiling JavaScript helps leverage the latest advancements in the language while maintaining broad compatibility and performance.
+
+### Esbuild
+
+In this repository, `esbuild` is used to handle modern JavaScript code efficiently. It offers rapid build times and optimized output.
+
+If needed, first install Node.js. Then run the following command to compile the source files in the `src/` directory. The output will be written to `dist/myApp.min.js`.
+
+```bash
+npm run build
+```
+
+Currently, our implementation in `index.html` imports all JavaScript files as `module`. To use the minified version, comment out `<script type="module"...` and uncomment the lines to include the minified version.
+
+Some notes:
+
+- The command `npm run build` is configured in the `package.json` file. The `scripts` section lists a set of custom scripts, and in this case, the alias `build` translates to `node build.js`. Therefore, you could also simply type `node build.js` in the terminal to achieve the same result.
+
+- Refer to the `build.js` file to see the details of how `esbuild` is used.
+
+## Testing
+
+In web development, testing is a crucial process to ensure the functionality, performance, and reliability of web applications. It typically involves several types of testing:
+
+1. **Unit Testing**: Testing individual components or functions in isolation to ensure they work as expected. Tools like Jest and Mocha are commonly used.
+
+2. **Integration Testing**: Testing how different components of the application work together. This ensures that the interactions between different modules are functioning correctly.
+
+3. **End-to-End (E2E) Testing**: Testing the entire application flow, from start to finish, to ensure the system works as a whole. Tools like Cypress and Selenium are often used.
+
+4. **Performance Testing**: Assessing the speed, responsiveness, and stability of the application under various conditions. Tools like Lighthouse and WebPageTest are used for performance testing.
+
+5. **Accessibility Testing**: Ensuring the web application is usable by people with disabilities. Tools like axe and Lighthouse can help identify accessibility issues.
+
+6. **Cross-Browser Testing**: Ensuring the application works correctly across different web browsers and versions. Tools like BrowserStack and Sauce Labs facilitate cross-browser testing.
+
+7. **Security Testing**: Identifying and fixing vulnerabilities to protect the application from threats. Tools like OWASP ZAP and Burp Suite are used for security testing.
+
+Testing helps identify and fix bugs early, improve code quality, and ensure a smooth user experience.
+
+This repository includes unit tests only for the `src/vec.js` file. To run the tests, use the following command:
+
+```bash
+npm run test
+```
+
+All tests are implemented in the `tests/` directory.
 
 ## Canvas
 
@@ -158,14 +255,91 @@ webGL / three.js / ...
 
 ## External modules
 
-## Minification
+This template does not use any external dependencies except for `esbuild`. In larger projects, existing libraries should be used to avoid reinventing the wheel.
 
-`esbuild` is designed to handle modern JavaScript and TypeScript code efficiently, providing rapid build times and optimized output for web development projects.
+As an example, we include `katex` in the following section to display the vector as a mathematical equation. Refer to the screenshot below to see the results.
 
-babel
+- First, go to [npmjs.com](https://www.npmjs.com) and search for `katex`. You will see a list of related packages. Click on `katex` to open its page at [https://www.npmjs.com/package/katex](https://www.npmjs.com/package/katex).
 
-`npm run build`
+- Review the package description and optionally visit the demo site. Then, use the following command to install the package:
 
-TODO:
+  ```bash
+  npm install katex
+  ```
 
-- use an external library as how-to
+  Run the command in the terminal. You will notice a new dependency entry in the `package.json` file, and the `node_modules/` directory will now include a new path for `katex`, along with additional directories for its dependencies.
+
+We will now modify the `src/index.html` file for our implementation:
+
+- Insert the following code just before `<canvas id...`. This will create the target div element where the equation will be rendered.
+
+  ```js
+  <div class="math" id="math"></div>
+  ```
+
+- Since `katex` uses CSS to style the rendered equations, insert the following line before `<title>...`.
+
+  ```js
+  <link rel="stylesheet" href="node_modules/katex/dist/katex.min.css" />
+  ```
+
+- We need to provide an import map to make `katex` accessible in the implementation in `src/`. Insert the following code before `<script type="module">...`.
+
+  ```js
+  <script type="importmap">
+    {
+      "imports": {
+        "katex": "./node_modules/katex/dist/katex.mjs"
+      }
+    }
+  </script>
+  ```
+
+Now we are ready to use `katex`. We will modify the file `src/control.js`:
+
+- Add an import statement before the local import statements.
+
+  ```js
+  import katex from "katex";
+  ```
+
+- Add the following code at the end of the `view()` method:
+
+  ```js
+  // == update the rendered math equation ==
+  // get the div element
+  const div = document.getElementById("math");
+  // get the coordinates of the vector
+  const x = this.vec.x;
+  const y = this.vec.y;
+  // construct the TeX-equation
+  const tex = `\\vec{v} = \\begin{pmatrix}${x}\\\\${y}\\end{pmatrix}`;
+  // generate HTML code and set it to the equation target div element
+  div.innerHTML = katex.renderToString(tex);
+  ```
+
+Debug the website by pressing [F5], ensuring that `index.html` is selected in the dropdown menu in the top-left area of VS Code first.
+
+![](img/readme/katex.jpg)
+
+**Note:** Keep an eye on the size of the minified JavaScript file `dist/myApp.min.js`. With many packages available, it's important to choose those that best meet your needs to avoid unnecessary bloat. For example, including `katex` results in an output file size of over 250 KB. Additionally, consider the compressed size (approximately 80 KB in this case), as many web servers compress files before transmission.
+
+## TypeScript
+
+TypeScript offers static typing, enhanced IDE support, and improved code maintainability compared to JavaScript. It detects errors early and supports advanced features like interfaces and generics. However, it has a steeper learning curve, requires a compilation step, and involves more configuration. Despite these drawbacks, TypeScript is beneficial for large, complex projects due to its reliability and readability improvements.
+
+We will not cover TypeScript in this context.
+
+## Distribution
+
+A JavaScript package is typically distributed via a package manager like npm (Node Package Manager). The steps involved are:
+
+1. **Create a Package**: Develop your package and ensure it includes a `package.json` file with metadata such as name, version, description, and dependencies.
+2. **Publish to npm**: Use the `npm publish` command to upload your package to the npm registry, making it available to other developers.
+3. **Versioning**: Update the package version in the `package.json` file following semantic versioning (semver) principles for each release.
+4. **Documentation**: Provide clear documentation and usage instructions to help users understand how to integrate and use your package.
+5. **Distribution**: Once published, users can install your package via npm using the `npm install <package-name>` command.
+
+Refer to [the official npm documentation](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) for instructions on publishing a package.
+
+## React & co

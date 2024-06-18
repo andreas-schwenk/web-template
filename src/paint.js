@@ -18,14 +18,17 @@
 
 import { Vec } from "./vec.js";
 
-export class DrawVectors {
-  /** @type {HTMLCanvasElement} */
+/**
+ * Viewer class that renders a 2D-vector in a Cartesian coordinate system.
+ */
+export class Paint {
+  /** @type {HTMLCanvasElement} -- drawing area */
   canvas;
   /** @type {Vec} -- private attribute for the vector */
   #vector;
-  /** @type {CanvasRenderingContext2D} */
+  /** @type {CanvasRenderingContext2D} -- rendering context */
   ctx;
-  /** @type {HTMLImageElement} */
+  /** @type {HTMLImageElement} -- image */
   img;
 
   /**
@@ -106,12 +109,12 @@ export class DrawVectors {
     // draw axes
     this.ctx.strokeStyle = "white";
     this.ctx.lineWidth = 2;
-    // x-axis
+    //   x-axis
     this.ctx.beginPath();
     this.ctx.moveTo(-w / 2, 0);
     this.ctx.lineTo(w / 2, 0);
     this.ctx.stroke();
-    // y-axis
+    //   y-axis
     this.ctx.beginPath();
     this.ctx.moveTo(0, -h / 2);
     this.ctx.lineTo(0, h / 2);
@@ -135,11 +138,11 @@ export class DrawVectors {
 
     // draw arrow (triangular polygon)
     let angle = Math.atan2(this.#vector.y, this.#vector.x);
-    // (a) translate
+    //   (a) translate
     this.ctx.save(); // push the current drawing state on stack
     this.ctx.translate(x, y);
     this.ctx.rotate(angle);
-    // (b) draw
+    //   (b) draw
     const arrowWidth = 30;
     const arrowHeight = 30;
     this.ctx.fillStyle = "green";
@@ -149,7 +152,7 @@ export class DrawVectors {
     this.ctx.lineTo(-arrowWidth / 2, arrowHeight / 2);
     this.ctx.closePath();
     this.ctx.fill();
-    // (c) pop "local" translation
+    //   (c) pop "local" translation
     this.ctx.restore();
 
     // pop "global" translation

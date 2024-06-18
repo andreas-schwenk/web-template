@@ -12,16 +12,31 @@
  * IN THE SOFTWARE.
  */
 
+// import the assert library, provided by node.js
+import assert from "assert";
+
+// import the class under test
+import { Vec } from "../src/vec.js";
+
 /**
- * This file represents the root source file.
+ * This file implements tests for the vector class.
+ * It is intended to be executed by Node.js.
  */
 
-// import the controller class. Note the relative path, preceded by "./"
+let v = new Vec(4, -1);
+assert.equal(v.x, 4);
+assert.equal(v.y, -1);
 
-import { Control } from "./ctrl.js";
+const EPS = 1e-9;
+v.normalize();
 
-// just a log to the console
-console.log("hello, world");
+assert.ok(Math.abs(v.x - 0.9701425001) < EPS);
+assert.ok(Math.abs(v.y + 0.242535625) < EPS);
 
-// create an instance of the controller class
-new Control();
+v = Vec.add(new Vec(1, 2), new Vec(3, 4));
+assert.equal(v.x, 4);
+assert.equal(v.y, 6);
+
+v = new Vec(1, 2);
+v.scale(2);
+assert.ok(Math.abs(v.length() - 4.4721359549) < EPS);

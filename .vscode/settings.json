@@ -5,9 +5,14 @@
   "editor.rulers": [80],
   "cSpell.words": [
     "esnext",
+    "headlessly",
+    "importmap",
+    "katex",
     "minifier",
     "nodenext",
+    "npmjs",
     "outfile",
+    "pmatrix",
     "Ritwick",
     "transpiles"
   ]

@@ -16,7 +16,9 @@
  * This file implements the controller class.
  */
 
-import { DrawVectors } from "./draw.js";
+import katex from "katex";
+
+import { Paint } from "./paint.js";
 import { Vec } from "./vec.js";
 
 /**
@@ -25,14 +27,14 @@ import { Vec } from "./vec.js";
 export class Control {
   /** @type {Vec} */
   vec = new Vec(5, 5);
-  /** @type {DrawVectors} */
-  draw;
+  /** @type {Paint} */
+  paint;
 
   constructor() {
-    this.draw = new DrawVectors(
+    this.paint = new Paint(
       /** @type {HTMLCanvasElement} */ (document.getElementById("my-canvas"))
     );
-    this.draw.setVector(this.vec);
+    this.paint.setVector(this.vec);
 
     // init
     this.#behave();
@@ -49,7 +51,7 @@ export class Control {
     );
     this.inputX.addEventListener("keyup", () => {
       this.vec.x = parseFloat(this.inputX.value);
-      this.draw.draw();
+      this.view();
     });
 
     /** @type {HTMLInputElement} */
@@ -58,7 +60,7 @@ export class Control {
     );
     this.inputY.addEventListener("keyup", () => {
       this.vec.y = parseFloat(this.inputY.value);
-      this.draw.draw();
+      this.view();
     });
 
     const btnNorm = document.getElementById("norm");
@@ -66,7 +68,26 @@ export class Control {
       this.vec.normalize();
       this.inputX.value = `${this.vec.x}`;
       this.inputY.value = `${this.vec.y}`;
-      this.draw.draw();
+      this.view();
     });
+
+    // update the view after setup
+    this.view();
+  }
+
+  /**
+   * Updates the paint view.
+   * @returns {void}
+   */
+  view() {
+    // update the canvas contents
+    this.paint.draw();
+
+    // update the rendered math equation
+    const div = document.getElementById("math");
+    const x = this.vec.x;
+    const y = this.vec.y;
+    const tex = `\\vec{v} = \\begin{pmatrix}${x}\\\\${y}\\end{pmatrix}`;
+    div.innerHTML = katex.renderToString(tex);
   }
 }
