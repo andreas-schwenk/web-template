@@ -357,5 +357,3 @@ A JavaScript package is typically distributed via a package manager like npm (No
 5. **Distribution**: Once published, users can install your package via npm using the `npm install <package-name>` command.
 
 Refer to [the official npm documentation](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) for instructions on publishing a package.
-
-## React & co
