@@ -154,7 +154,7 @@ The following template illustrates a recommended layout for a JavaScript file.
 
 // <list of exported classes / functions>
 
-// <list of local classes / functions (helpers) >
+// <list of local classes / functions (helpers)>
 ```
 
 Some Notes:
@@ -171,36 +171,40 @@ Since ECMAScript 6 (ES6), JavaScript has direct support for object-oriented prog
 
 Study classes in files `src/vec.js`, `src/draw.js`.
 
-Some notes:
+**Note:** In JavaScript, private attributes can be defined using the `#` prefix, introduced in ECMAScript 2022. These attributes are only accessible within the class where they are defined, ensuring encapsulation and data privacy. Later, we will use a build tool to support older browsers. Since private attributes are very useful but still rarely used in existing projects, we provide the following example:
 
-- In JavaScript, private attributes can be defined using the `#` prefix, introduced in ECMAScript 2022 (Later, we will use a build tool to support older browsers). These attributes are only accessible within the class where they are defined, ensuring encapsulation and data privacy. For example:
+```javascript
+/**
+ * Demo class showcasing public and private attributes
+ */
+class MyClass {
+  /* @type {number} -- private attribute for a number */
+  #privateAttribute;
+  /* @type {number} -- public attribute for a number */
+  publicAttribute = 5; // TODO: must this attribute be listed in the constructor??
 
-  ```javascript
   /**
-   * Demo class showcasing private attributes
+   * @param {number} value -- the number
    */
-  class MyClass {
-    /* @type {number} -- private attribute for a number */
-    #privateAttribute;
-    /* @type {number} -- public attribute for a number */
-    publicAttribute = 5; // TODO: must this attribute be listed in the constructor??
-
-    /**
-     * @param {number} value -- the number
-     */
-    constructor(value) {
-      this.#privateAttribute = value;
-    }
-
-    /**
-     * Getter function for the private attribute
-     * @returns {number}
-     */
-    getPrivateAttribute() {
-      return this.#privateAttribute;
-    }
+  constructor(value) {
+    // initialize privateAttribute with a given value
+    this.#privateAttribute = value;
   }
-  ```
+
+  /**
+   * Getter function for the private attribute
+   * @returns {number}
+   */
+  getPrivateAttribute() {
+    return this.#privateAttribute;
+  }
+}
+
+// create an instance
+let inst = new MyClass(42);
+console.log(inst.publicAttribute); // prints 5
+console.log(inst.getPrivateAttribute()); // prints 42
+```
 
 ## Compilation, Bundling, Minification
 
