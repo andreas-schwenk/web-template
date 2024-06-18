@@ -52,21 +52,21 @@ Alternatively, start a web server by running `python3 -m http.server 5500` and t
 
 The following tables list all the directories and files in this repository. Reviewing each file will help you gain a deeper understanding.
 
-| path            | description                                                              |
-| --------------- | ------------------------------------------------------------------------ |
-| `.vscode/`      | Configuration files for the VS Code project                              |
-| `dist/`         | Bundled/minified JavaScript output                                       |
-| `img/`          | Images                                                                   |
-| `node_modules/` | Dependencies that are installed via `npm install`                        |
-| `src/`          | The core implementation in form of JavaScript files                      |
-| `test/`         | Code tests                                                               |
-| `.gitignore`    | Paths that are ignored by `git`                                          |
-| `build.js`      | Script that outputs files in `dist/`                                     |
-| `index.html`    | HTML file of the web app                                                 |
-| `jsconfig.json` | JavaScript configuration for VS Code                                     |
-| `LICENSE`       | License of this repository                                               |
-| `package.json`  | Manages project dependencies, scripts, and metadata in Node.js projects. |
-| `README.md`     | This Readme file                                                         |
+| path            | description                                                             |
+| --------------- | ----------------------------------------------------------------------- |
+| `.vscode/`      | Configuration files for the VS Code project                             |
+| `dist/`         | Bundled/minified JavaScript output                                      |
+| `img/`          | Images                                                                  |
+| `node_modules/` | Dependencies that are installed via `npm install`                       |
+| `src/`          | The core implementation in form of JavaScript files                     |
+| `test/`         | Code tests                                                              |
+| `.gitignore`    | Paths that are ignored by `git`                                         |
+| `build.js`      | Compilation script that outputs files in `dist/`                        |
+| `index.html`    | Root HTML file of the web app                                           |
+| `jsconfig.json` | JavaScript configuration for VS Code                                    |
+| `LICENSE`       | License of this repository                                              |
+| `package.json`  | Manages project dependencies, scripts, and metadata in Node.js projects |
+| `README.md`     | This Readme file                                                        |
 
 Directory `.vscode/` provides configuration files for this project:
 
@@ -87,19 +87,19 @@ Directory `src/` contains all JavaScript implementation files:
 
 ## JSDoc
 
-JavaScript is a dynamically typed language.
+JavaScript is a dynamically typed language, meaning variable types are determined at runtime rather than at compile time, allowing variables to hold values of any type without explicit declarations. This flexibility can simplify code but may introduce runtime type errors.
 
-A dynamically typed language is one in which variable types are determined at runtime, rather than at compile time, allowing variables to hold values of any type without explicit declarations. This flexibility can lead to simpler code but may introduce runtime type errors.
+JSDoc is used in JavaScript to provide inline documentation and type annotations, helping developers understand and maintain code. It generates documentation and enhances code editor support, such as autocompletion and type checking.
 
-JSDoc is used in JavaScript to provide inline documentation and type annotations for code, helping developers understand and maintain code by generating documentation and enabling better code editor support, such as autocompletion and type checking.
+In VS Code, file `jsconfig.json` is used to configure the JavaScript language service, enabling features like IntelliSense, code navigation, and project-wide type checking.
 
-In VS Code, we use the file `jsconfig.json` to configure the JavaScript language service. For example, it enables features such as IntelliSense, code navigation, and project-wide type checking.
+To gain a better understanding, open the files `src/vec.js` and `src/control.js` and study the JSDoc comments, which begin with `/**`.
 
-Refer to the file `src/vec.js` and review the JSDoc comments, which begin with `/**`. You should provide JSDoc comments for each class, method, attribute, global variable, method/function parameter, return type, and so on.
+> You should always provide JSDoc comments for each class, method, attribute, global variable, method/function parameter, return type, and so on.
 
 ## Debugging
 
-We have two options to debug a file:
+We can either debug the entire website or debug individual JavaScript files using Node.js.
 
 ### Debugging with a browser
 
@@ -108,15 +108,17 @@ We have two options to debug a file:
 3. Enable debugging breakpoints: open a JavaScript file and click to the left of the line number (refer to the screenshot below).
 4. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
 
+The debugger will stop at the first breakpoint. Use the navigation bar to step through, continue, restart, or stop the execution. Observe the variable values in the left panel.
+
 ![](img/readme/debug.jpg)
 
 ### Debugging with Node.js
 
 Some code does not require a browser to run. For example, the `Vector` class in `src/vec.js` can be executed headlessly using [Node.js](https://nodejs.org/en/download/package-manager). In this case, a web server is not needed.
 
-1. Select `node: current file` in the top-left corner of VS Code.
+1. Select `node: current file` from the drop-down menu in the top-left corner of VS Code.
 2. Enable debugging breakpoints by opening a JavaScript file and clicking to the left of the line number.
-3. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
+3. Press [F5] or go to [Run] → [Start Debugging] in the main menu.
 
 ### Launch.json
 
@@ -130,26 +132,29 @@ Consistent code style aids collaboration and simplifies maintenance. Tools like 
 
 ### Template for a JavaScript file
 
-The following template illustrates the layout of a JavaScript file.
+The following template illustrates a recommended layout for a JavaScript file.
 
 ```js
 /**
  * Project name
- * Author(s)
+ * Author(s) / Institute / Contact
  * License
+ * Changelog (optional)
  */
 
 /*
- * Short summary of the current file.
+ * Short description of the current file.
  */
 
 // <list of imports to external dependencies>
 
-// <list of import to local dependencies, i.e. local JavaScript files>
+// <list of imports to local dependencies>
 
 // <list of global variables>
 
-// <list of classes / functions>
+// <list of exported classes / functions>
+
+// <list of local classes / functions (helpers) >
 ```
 
 Some Notes:
