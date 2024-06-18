@@ -97,9 +97,40 @@ In VS Code, we use the file `jsconfig.json` to configure the JavaScript language
 
 Refer to the file `src/vec.js` and review the JSDoc comments, which begin with `/**`. You should provide JSDoc comments for each class, method, attribute, global variable, method/function parameter, return type, and so on.
 
-## Style of a file
+## Debugging
 
-The following template shows the layout of a JavaScript file.
+We have two options to debug a file:
+
+### Debugging with a browser
+
+1. Start the web server as described in the "First Run" section above.
+2. Select `index.html` in the top-left panel of VS Code.
+3. Enable debugging breakpoints: open a JavaScript file and click to the left of the line number (refer to the screenshot below).
+4. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
+
+![](img/readme/debug.jpg)
+
+### Debugging with Node.js
+
+Some code does not require a browser to run. For example, the `Vector` class in `src/vec.js` can be executed headlessly using [Node.js](https://nodejs.org/en/download/package-manager). In this case, a web server is not needed.
+
+1. Select `node: current file` in the top-left corner of VS Code.
+2. Enable debugging breakpoints by opening a JavaScript file and clicking to the left of the line number.
+3. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
+
+### Launch.json
+
+In the previous sections, we used the launch configurations `index.html` and `node: current file`. These configurations are defined in the `.vscode/launch.json` file. For more details, refer to the [official documentation](https://code.visualstudio.com/docs/editor/debugging).
+
+## Code Styling
+
+Code styling involves conventions for formatting and structuring code to ensure readability, consistency, and maintainability. This includes rules for indentation, naming conventions, spacing, and comments.
+
+Consistent code style aids collaboration and simplifies maintenance. Tools like ESLint and Prettier enforce these conventions in JavaScript. Here, we will use the built-in tools in VS Code.
+
+### Template for a JavaScript file
+
+The following template illustrates the layout of a JavaScript file.
 
 ```js
 /**
@@ -121,10 +152,11 @@ The following template shows the layout of a JavaScript file.
 // <list of classes / functions>
 ```
 
-Notes:
+Some Notes:
 
 - Global variables should be used sparingly.
-- Only `export` classes and functions when necessary. For example, helper functions should remain visible only within the current file.
+
+- Classes and functions used in other source files must be exported using the `export` keyword. Only export classes and functions when necessary; for example, keep helper functions visible only within the current file.
 
 ## Object Oriented Programming
 
@@ -164,31 +196,6 @@ Some notes:
     }
   }
   ```
-
-## Debugging
-
-We have two options to debug a file:
-
-### Debugging with a browser
-
-1. Start the web server as described in the "First Run" section above.
-2. Select `index.html` in the top-left panel of VS Code.
-3. Enable debugging breakpoints: open a JavaScript file and click to the left of the line number (refer to the screenshot below).
-4. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
-
-![](img/readme/debug.jpg)
-
-### Debugging with Node.js
-
-Some code does not require a browser to run. For example, the `Vector` class in `src/vec.js` can be executed headlessly using [Node.js](https://nodejs.org/en/download/package-manager). In this case, a web server is not needed.
-
-1. Select `node: current file` in the top-left corner of VS Code.
-2. Enable debugging breakpoints by opening a JavaScript file and clicking to the left of the line number.
-3. Press [F5] or go to [Run] &rarr; [Start Debugging] in the main menu.
-
-### Launch.json
-
-In the previous sections, we used the launch configurations `index.html` and `node: current file`. These configurations are defined in the `.vscode/launch.json` file. For more details, refer to the [official documentation](https://code.visualstudio.com/docs/editor/debugging).
 
 ## Compilation, Bundling, Minification
 
@@ -275,6 +282,15 @@ We will now modify the `src/index.html` file for our implementation:
 
   ```js
   <div class="math" id="math"></div>
+  ```
+
+- Optionally, add a style class within the `<style>...</style>` tags.
+
+  ```css
+  .math {
+    text-align: center;
+    margin-bottom: 5px;
+  }
   ```
 
 - Since `katex` uses CSS to style the rendered equations, insert the following line before `<title>...`.

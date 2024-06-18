@@ -16,8 +16,6 @@
  * This file implements the controller class.
  */
 
-import katex from "katex";
-
 import { Paint } from "./paint.js";
 import { Vec } from "./vec.js";
 
@@ -82,12 +80,5 @@ export class Control {
   view() {
     // update the canvas contents
     this.paint.draw();
-
-    // update the rendered math equation
-    const div = document.getElementById("math");
-    const x = this.vec.x;
-    const y = this.vec.y;
-    const tex = `\\vec{v} = \\begin{pmatrix}${x}\\\\${y}\\end{pmatrix}`;
-    div.innerHTML = katex.renderToString(tex);
   }
 }

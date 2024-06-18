@@ -19,8 +19,5 @@
   "license": "MIT",
   "devDependencies": {
     "esbuild": "^0.21.4"
-  },
-  "dependencies": {
-    "katex": "^0.16.10"
   }
 }

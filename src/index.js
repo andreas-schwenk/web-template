@@ -18,7 +18,7 @@
 
 // import the controller class. Note the relative path, preceded by "./"
 
-import { Control } from "./ctrl.js";
+import { Control } from "./control.js";
 
 // just a log to the console
 console.log("hello, world");
