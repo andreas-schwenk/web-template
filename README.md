@@ -6,7 +6,7 @@ There are countless HTML/JavaScript tutorials available. This one is designed as
 
 We will **not** cover JavaScript libraries for rapidly building user interfaces, such as `React`, `vue.js`, or `angular`, as we believe it is necessary to first understand the foundations. These libraries should be used **after** studying this tutorial.
 
-We will not provide a detailed introduction to JavaScript syntax but will demonstrate object-oriented JavaScript code that is easy to understand. The focus will be on classes, private methods, and a well-structured project setup.
+We will not provide a detailed introduction to JavaScript syntax but will demonstrate object-oriented JavaScript code that is easy to understand, and a well-structured project setup.
 
 Finally, we will demonstrate how to include external libraries and use a build tool to bundle and minify the code.
 
@@ -30,9 +30,11 @@ We will need to run a local web server. There are several options for doing this
 
 `npm` stands for Node Package Manager. It is the default package manager for the JavaScript runtime environment Node.js, allowing developers to share, distribute, and manage dependencies in their projects.
 
-Go to the terminal window (`Terminal` &rarr; `New Terminal` in the main menu) and type `npm i` and press enter, to install all the dependencies listed in file `package.json`.
+To install all the dependencies listed in the `package.json` file, open the terminal (`Terminal` &rarr; `New Terminal` in the main menu) and type `npm i`, then press enter.
 
-The only dependency we use here is `esbuild`, an extremely fast JavaScript bundler and minifier. It compiles the source files from the `src/` directory into a single, small JavaScript file in the `dist/` directory. However, since our project is set up as a `module`, a bundler is not strictly necessary. For more details, refer to the "Minification" section below.
+We will use two dependencies in this project. The first is `esbuild`, an extremely fast JavaScript bundler and minifier. It compiles the source files from the `src/` directory into a single, small JavaScript file in the `dist/` directory. However, since our project is set up as a `module`, a bundler is not strictly necessary. For more details, refer to the "Minification" section below.
+
+The second dependency is `katex`, used to render mathematical equations with [TeX](https://en.wikipedia.org/wiki/TeX). This dependency is not included in the provided source code. This tutorial will explain how to use external libraries, with `katex` as an example.
 
 # First Run
 
