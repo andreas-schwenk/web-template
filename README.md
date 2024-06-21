@@ -4,7 +4,7 @@
 
 There are countless HTML/JavaScript tutorials available. This one is designed as a starting point for students with little experience in web development, as well as for experienced users who want to switch to _Visual Studio Code_ and utilize its linter and debugger features.
 
-We will **not** cover JavaScript libraries for rapidly building user interfaces, such as `React`, `vue.js`, or `angular`, as we believe it is necessary to first understand the foundations. These libraries should be used **after** studying this tutorial.
+We will **not** cover JavaScript libraries for rapidly building user interfaces, such as `react`, `vue.js`, or `angular`, as we believe it is necessary to first understand the foundations. These libraries should be used **after** studying this tutorial.
 
 We will not provide a detailed introduction to JavaScript syntax but will demonstrate object-oriented JavaScript code that is easy to understand, and a well-structured project setup.
 
@@ -348,6 +348,138 @@ Debug the website by pressing [F5], ensuring that `index.html` is selected in th
 TypeScript offers static typing, enhanced IDE support, and improved code maintainability compared to JavaScript. It detects errors early and supports advanced features like interfaces and generics. However, it has a steeper learning curve, requires a compilation step, and involves more configuration. Despite these drawbacks, TypeScript is beneficial for large, complex projects due to its reliability and readability improvements.
 
 We will not cover TypeScript in this context.
+
+## Server Side Development
+
+In this tutorial, we will use Express.js as the server. The example code will demonstrate how to store data in a local file.
+
+Express.js is a minimal and flexible Node.js web application framework that provides a robust set of features to build web and mobile applications. It simplifies the development process by offering a range of HTTP utility methods and middleware, enabling the creation of APIs and dynamic web pages efficiently.
+
+Visit [https://expressjs.com](https://expressjs.com) for detailed information.
+
+Installation:
+
+```bash
+npm install express --save
+```
+
+### Server side code 1/2
+
+Create a new file named `server.js` in the root directory of your repository, and then paste the following code into it:
+
+```js
+import express from "express";
+import path from "path";
+import fs from "fs";
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const port = 3000;
+
+// serve index.html
+app.get("/", (req, res) => {
+  res.send("Hello, World!");
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
+```
+
+Start the server using Node.js with the following command:
+
+```bash
+node server.js
+```
+
+Open your web browser and navigate to `http://localhost:3000/`. Verify that the "Hello, World!" message appears on the page.
+
+To debug the server, switch to the `Run and Debug` view by clicking the debug icon in the left panel, then select `node: current file` from the drop-down menu at the top.
+
+**Hint:** A better solution is to add a new entry in `.vscode/launch.json`. Copy the `node: current file` entry, rename it to `server`, and change `${file}` to `server.js`.
+
+Start debugging by pressing [F5] or navigating to `Run` &rarr; `Start Debugging` in the main menu.
+
+To enable JavaScript language features for the server file in VS Code, update the include path in `jsconfig.json` as follows:
+
+```
+"include": ["src/**/*.js", "test/**/*.js", "server.js"],
+```
+
+### Server side code 2/2
+
+So far, only a single string ("Hello, World!") is being sent to the browser.
+
+First, we need to send the `index.html` file instead of the string. Here's how to do it:
+
+```js
+res.sendFile("index.html", { root: __dirname });
+```
+
+Since we enabled `module` mode in the `package.json` file, the identifier `__dirname` is not available. To fix this, add the following code before `const app = ...`:
+
+```js
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+```
+
+Stop and restart the server. In the browser console, you'll notice that loading the module from `http://localhost:3000/src/index.js` is blocked. This happens because only the root (i.e., `index.html`) is being served. To resolve this, we need to add a route to serve static files. Insert the following lines after `const port = `:
+
+Put the following lines after `const port = `:"
+
+```js
+// serve static files
+app.use(express.static(path.join(__dirname, ".")));
+```
+
+The page should now be visible, similar to how it appeared when using the Live-Server (or Python-Server) at the start of the tutorial.
+
+Now, we will add a route that saves files. Insert the following code before `app.listen(...)`.
+
+```js
+// route for saving data a local text file
+app.post("/save", (req, res) => {
+  console.log("... saving data ");
+  let data = JSON.stringify(req.body);
+  fs.writeFile("data.txt", data, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error saving the content");
+    }
+    // respond to the server
+    res.send("Content saved successfully");
+  });
+});
+```
+
+This code defines a POST route that receives a string from the client and saves it to a local file.
+
+### Client side code
+
+We now need to send the data from the client side to the server. For simplicity, we’ll save the current vector data when the user clicks the "normalize" button.
+
+In the file `src/control.js`, add the following code to the event handler:
+
+```js
+let data = this.vec.toJSON();
+fetch("/save", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(data),
+})
+  .then((response) => response.text())
+  .then((response) => {
+    console.log(response);
+    alert(response);
+  });
+```
+
+Restart the server and check if a file named `data.txt` is created in the root directory of the repository (for better organization in a real project, you should create a `data/` directory). The browser should display an alert message saying `Content saved successfully`.
 
 ## Distribution
 
