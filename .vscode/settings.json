@@ -8,12 +8,17 @@
     "headlessly",
     "importmap",
     "katex",
+    "loggedin",
+    "mariadb",
     "minifier",
     "nodenext",
     "npmjs",
     "outfile",
     "pmatrix",
+    "resave",
     "Ritwick",
-    "transpiles"
+    "transpiles",
+    "varchar",
+    "VARCHAR"
   ]
 }
