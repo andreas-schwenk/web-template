@@ -1,5 +1,7 @@
 # Web Template
 
+<!-- TODO: more screenshots; express.js: secure login, DB -->
+
 > Template for a Vanilla JavaScript-based Web Application using VSCode: Setup, structuring, debugging, and minification.
 
 There are countless HTML/JavaScript tutorials available. This one is designed as a starting point for students with little experience in web development, as well as for experienced users who want to switch to _Visual Studio Code_ and utilize its linter and debugger features.
@@ -378,7 +380,6 @@ app.use(express.urlencoded({ extended: true }));
 
 const port = 3000;
 
-// serve index.html
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
@@ -480,6 +481,325 @@ fetch("/save", {
 ```
 
 Restart the server and check if a file named `data.txt` is created in the root directory of the repository (for better organization in a real project, you should create a `data/` directory). The browser should display an alert message saying `Content saved successfully`.
+
+### Databases
+
+We use `MariaDB` as our database to store basic user data. The example code provides a login page that asks for a username and password. When the user clicks `login` and the provided credentials are correct, the main page opens.
+
+First, create a login page named `login.html`:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form action="/auth" method="post">
+      User:
+      <input type="text" id="username" name="username" required />
+      Password:
+      <input type="password" id="password" name="password" required />
+      <input type="submit" value="log in" />
+    </form>
+  </body>
+</html>
+```
+
+"Optionally, use CSS to enhance the visual appearance.
+
+Next, we need to set up the server code. First, install the database, and then add a route to `server.js`. Additionally, change the default file from `index.html` to `login.html`.
+
+Please note that some commands will use the name `mysql` instead of `mariadb`. To install it on Linux, follow these steps:"
+
+```bash
+sudo apt install mariadb-server
+```
+
+Configure MariaDB as follows:
+
+```bash
+sudo mysql_secure_installation
+```
+
+Since the current root password is empty, press [ENTER] to skip. Then set a new root password. Remove the anonymous user and disallow remote login for the root user. Optionally, remove the test database. Finally, reload the privilege tables.
+
+Access MariaDB as the root user by running the command `sudo mariadb -p`.
+
+Create a new database named `example` and switch to it:
+
+```sql
+create database example;
+use example;
+```
+
+Create a table named `users` with a primary key `id`, and two columns `username` and `password`, both of type `VARCHAR(256)`. Afterwards, verify the table structure using `DESCRIBE users;` to ensure it has the desired properties. Then, add a new user with the username `admin` and password `1337`.
+
+```sql
+create table Users (id int not null auto_increment, username varchar(256) not null, password varchar(256) not null,
+primary key(id));
+insert into Users (username, password) values ('admin', '1337');
+select * from Users;
+```
+
+Please note that the password is currently stored in plaintext, which is _not_ secure.
+
+At the moment, only the Linux root user can access `mariadb`. We need to create a new, less privileged user named `alpha`:
+
+```sql
+create user alpha@localhost identified by 'pwd42';
+grant all on example.* to alpha@localhost;
+flush privileges;
+```
+
+"Exit MariaDB using the shortcut [CTRL]+[D] or the command `exit`. Then, check access for the new user by running `mariadb -u alpha -p` in the command line.
+
+To enable database access from the server-side Express application, install the `mysql` package as follows. Observe the new entry in `package.json`:"
+
+```bash
+npm install mysql --save
+```
+
+Establish the connection to the database in `server.js` by adding the following line to the import section:
+
+```js
+import mysql from "mysql";
+```
+
+Next, establish the connection as follows:
+
+```js
+const connection = mysql.createConnection({
+  host: "127.0.0.1",
+  user: "alpha",
+  password: "pwd42",
+  database: "example",
+  multipleStatements: true,
+});
+connection.connect(function (err) {
+  if (err) throw err;
+});
+```
+
+Restart the server to verify that the connection to the database is established. If successful, no error messages will be printed.
+
+Next, add a new route to handle user login:
+
+```js
+app.post("/auth", function (request, response) {
+  const username = request.body.username;
+  const password = request.body.password;
+  console.log("user=" + username); // debug info
+  console.log("password=" + password); // debug info
+  const query =
+    "SELECT password FROM users WHERE username = " + '"' + username + '"';
+  connection.query(query, [], function (error, results, fields) {
+    if (error) {
+      throw error;
+    } else if (results.length > 0) {
+      const passwordInDB = results[0].password;
+      if (passwordInDB === password) {
+        response.redirect("/main");
+      } else {
+        response.send("wrong password!");
+      }
+    } else {
+      response.send("login failed!");
+    }
+    response.end();
+  });
+});
+```
+
+Modify the main route to open `login.html` instead of `index.html`:
+
+```js
+app.get("/", (req, res) => {
+  res.sendFile("login.html", { root: __dirname });
+});
+```
+
+In the case of a successful login, the user will be redirected to `/main`. Here is the implementation of that route:
+
+```js
+app.get("/main", function (request, response) {
+  response.sendFile("index.html", { root: __dirname });
+});
+```
+
+### Secure Login
+
+The previous section provided a basic explanation of how to use databases for login functionality, but it did _not_ address potential attacks and security measures.
+
+Here are some suggestions for improvements:
+
+#### **Broken Authentication**
+
+Currently, it's possible to access the main page without logging in by directly entering the URL `http://localhost:3000/main`. This occurs because we haven't implemented a session validation check.
+
+To address this, first install the `express-session` package:
+
+```bash
+npm install express-session
+```
+
+Next, import the newly installed `express-session` package in the `server.js` file:
+
+```js
+import session from "express-session";
+```
+
+First, we need to configure the session:
+
+```js
+app.use(
+  session({
+    secret: "secret",
+    name: "myCookie",
+    cookie: { httpOnly: false, sameSite: true },
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+```
+
+In the `/auth` route, we need to store the user credentials right before redirecting to the main route:
+
+```js
+if (passwordInDB === password) {
+  request.session.loggedin = true;
+  request.session.username = username;
+  response.redirect("/main");
+}
+```
+
+**Note that the attributes `loggedin` and `username` are self-chosen names.**
+
+The main route has to be modified to check if the user has logged in successfully:
+
+```js
+app.get("/main", function (request, response) {
+  if (request.session.loggedin) {
+    response.sendFile("main.html", { root: __dirname });
+  } else {
+    response.send("You are not logged in!");
+  }
+});
+```
+
+#### **SQL Injection**
+
+Currently, the username input field is vulnerable to SQL injection.
+
+```
+"; update Users set password="HACKED
+```
+
+To mitigate SQL injection risks, we should disable `multipleStatements` by setting it to `false` in the `createConnection` call.
+
+Since SQL syntax allows injections within a single statement (e.g., appending `OR 1=1`), we need to make further adjustments. Each parameter in a SQL query should be treated as untrusted and therefore escaped.
+
+Currently, we are constructing the query as follows:
+
+```js
+const query =
+  "SELECT password FROM users WHERE username = " + '"' + username + '"';
+```
+
+We should escape the variable `username` to prevent an SQL injection:
+
+```js
+const query =
+  "SELECT password FROM users WHERE username = " +
+  '"' +
+  mysql.escape(username) +
+  '"';
+```
+
+#### **Plaintext Passwords**
+
+In the worst case, an attacker could read plaintext passwords from the database. To prevent this, we should store password hashes instead of the actual passwords.
+
+For example, we can use `bcrypt` to hash passwords ([bcrypt on npm](https://www.npmjs.com/package/bcrypt)):
+
+```bash
+npm install bcrypt
+```
+
+Since our implementation does not include a registration form, we need to manually set the password hashes in our database.
+
+Create a new file named `bcrypt-test.js` and run it with `node bcrypt-test.js` to generate the hash for the password `1337`. For simplicity, you can also temporarily add the following lines to `server.js`.
+
+```js
+import bcrypt from "bcrypt";
+console.log(bcrypt.hashSync("1337", 10));
+```
+
+You can manually update the database by logging in with `mariadb -u alpha -p` and then running the following SQL queries (replace `?` with the hash value generated earlier):
+
+```sql
+USE example;
+UPDATE users SET password="?" WHERE username="alpha";
+SELECT * FROM users;
+```
+
+Next, update the server implementation. Start by importing `bcrypt`:
+
+```js
+import bcrypt from "bcrypt";
+```
+
+Then, update the password comparison logic in the `/auth` route as follows:
+
+```js
+if (bcrypt.compareSync(password, passwordInDB)) { ... }
+```
+
+#### **Unencrypted Webdata**
+
+HTTPS (Hypertext Transfer Protocol Secure) is an extension of HTTP (Hypertext Transfer Protocol) and is used for secure communication over a computer network, especially the Internet. HTTPS ensures that data sent between a user’s web browser and a website is encrypted, providing confidentiality and integrity of the data in transit.
+
+SSL (Secure Sockets Layer) is a standard security technology for establishing an encrypted link between a server and a client—typically a web server (website) and a browser, or a mail server and a mail client.
+
+Ensure that your real-world implementation supports the encryption of web data.
+
+#### **More**
+
+We have only covered a small subset of potential attacks. For more detailed information, please refer to specialized tutorials.
+
+### Fetch API
+
+The login example demonstrated how to use a web form to transmit data. In a dynamic web page, we need to handle HTTP requests without navigating to another HTML file.
+
+The Fetch API is a modern JavaScript interface for making HTTP requests, offering a more powerful and flexible feature set compared to the older XMLHttpRequest (XHR) used in AJAX.
+
+The following example code shows how user data, in the form of a JSON object, is transmitted to the server via a `POST` request:
+
+```js
+const data = { username: "alpha", password: "1337" };
+fetch("/auth", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(data),
+})
+  .then((response) => {
+    if (!response.ok) throw new Error("Network response was not ok");
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.error("There has been a problem with your fetch operation:", error);
+  });
+```
+
+On the server side, the `/auth` route is used to handle the request.
+
+For more details, refer to [MDN Web Docs: Using Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
 
 ## Distribution
 
